@@ -31,7 +31,7 @@ Keypad kpd = Keypad( makeKeymap(keys), rowPins, colPins, ROWS, COLS );
 
 void setup()
 {
-  pinMode(sensor, INPUT)
+  pinMode(sensor, INPUT);
   pinMode(buzzer, OUTPUT);
   pinMode(Green, OUTPUT);
   pinMode(Yellow, OUTPUT);
@@ -45,7 +45,10 @@ void loop()
   {
     answer = read();
     if (answer.equals("on"))
+    {
       alarmOn_A();
+      sensorStatus();
+    }
     else if (answer.equals("off"))
       alarmOff();
     else if (answer.equals("siren"))
@@ -215,6 +218,8 @@ bool sensorStatus()
   else
   {
   Serial.print("0");
+  sirenOn = true;
+  siren();
   return false;
   }
 }
