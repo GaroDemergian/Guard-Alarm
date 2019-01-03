@@ -32,19 +32,21 @@ int main()
     //this loop will keep the alarm system program running.
     while (workingAlarm == true)
     {
-        guardingOn(guarding);
+        //guardingOn(guarding);
         int tries = 0;
         //this loop is for deactivating and activating the alarm.
         //the alarm is active while guarding is true.
         while (guarding == true)
         {
+            //checkSensor();
             //this function is mainly for stopping the user from entering a wrong pincode more than 3 times.
             while (guarding == true && tries < 3)
             {
                 cout << "Alarm is active" << endl;
                 cout << endl;
                 cout << "Enter pincode " << endl;
-                usersInput = stoi(getInput());
+                cin >> usersInput;
+                //usersInput = stoi(getInput());
 
                 //If input == any of pincodes saved in file and user isnt blocked => menu.
                 //if not then try again, max 3 tries.
@@ -70,9 +72,10 @@ int main()
         int x;
         int tries2 = 0;
         cout << endl;
-        cout << "To activate alarm press 1 then * " << endl;
-        cout << "for configurations press 2 then * " << endl;
-        x = stoi(getInput());
+        cout << "To activate alarm press 1 then # " << endl;
+        cout << "for configurations press 2 then # " << endl;
+        cin >> x;
+        //x = stoi(getInput());
         switch (x)
         {
         case 1:
@@ -82,7 +85,8 @@ int main()
                 {
                     cout << endl;
                     cout << "Enter pincode " << endl;
-                    usersInput = stoi(getInput());
+                    cin >> usersInput;
+                    //usersInput = stoi(getInput());
 
                     //pincode ok = menu. pincode not ok try again. 3 times
                     logging_out(usersInput, &activeUser, guarding);

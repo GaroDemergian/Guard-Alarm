@@ -5,7 +5,10 @@ using namespace std;
 
 string getInput();
 void send(string msg);
-
+void sensorlocked();
+void checkSensor();
+void systemLog(string sensor, int status);
+string getSensorInfo();
 
 
 #endif

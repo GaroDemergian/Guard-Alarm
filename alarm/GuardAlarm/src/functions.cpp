@@ -21,6 +21,7 @@ void guardingOff(bool &guarding)
 void guardingOn(bool &guarding)
 {
     guarding = true;
+    checkSensor();
     send("on");
 }
 
@@ -127,12 +128,6 @@ void message_log(int num, string *str)
     case 11:
         *str = "Blocked user attempted alarm activation";
         break;
-    case 12:
-        *str = "Door opened";
-        break;
-    case 13:
-        *str = "Motion detected";
-        break;
     }
 }
 
@@ -187,7 +182,9 @@ void locked()
     systemLog(8, "Unknown");
     for (int i = 0; i < 1;)
     {
-    } // The system stays in the loop.
+        // The system stays in the loop.
+        checkSensor();
+    } 
 }
 
 //this function accepts user input and checks if it matches with any saved pincode from users.dat
@@ -242,15 +239,3 @@ void logging_out(int usersInput, struct User *active, bool &guarding)
     userInfo.close();
 }
 
-
-void checkSensors()
-{
-    if (stoi(getInput()) == 1)
-    {}
-    else 
-    {
-        systemLog(12, "Unknown");
-        locked();
-    }
-
-}
