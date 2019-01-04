@@ -8,7 +8,7 @@ void guardingOn(bool &guarding);
 void userWelcomeMsg(struct User activeUser);
 void message_log(int num, string *str);
 void systemLog(int num, string id);
-void locked();
+void locked(class SerialPort *arduino, char incomingData[]);
 void logging_in(int usersInput, struct User *active, bool &guarding);
 void logging_out(int usersInput, struct User *active, bool &guarding);
 

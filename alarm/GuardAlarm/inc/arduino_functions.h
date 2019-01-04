@@ -3,12 +3,12 @@
 
 using namespace std;
 
-string getInput();
+string getInput(class SerialPort *arduino, char incomingData[]);
 void send(string msg);
-void sensorlocked();
-void checkSensor();
+void sensorlocked(class SerialPort *arduino, char incomingData[]);
+void checkSensor(class SerialPort *arduino, char incomingData[]);
 void systemLog(string sensor, int status);
-string getSensorInfo();
+string getSensorInfo(class SerialPort *arduino, char incomingData[]);
 
 
 #endif

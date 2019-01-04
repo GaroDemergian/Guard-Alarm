@@ -17,102 +17,105 @@
 #include <string>
 #include "functions.h"
 #include "User.h"
-#include "Sensor.h"
 #include "arduino_functions.h"
 #include "SerialPort.h"
 
+char portNo[] = "\\\\.\\COM5";
+char *port_name = portNo;
+//string for incoming data
+char incomingData[MAX_DATA_LENGTH];
+char output[MAX_DATA_LENGTH];
+//Serial object
+SerialPort arduino(port_name);
+
 int main()
 {
-    struct User activeUser;
-
-    const bool workingAlarm = true; //workingAlarm should never be false.
-    bool guarding = true;
-    int usersInput;
-
-    //this loop will keep the alarm system program running.
-    while (workingAlarm == true)
+    while (arduino.isConnected())
     {
-        //guardingOn(guarding);
-        int tries = 0;
-        //this loop is for deactivating and activating the alarm.
-        //the alarm is active while guarding is true.
-        while (guarding == true)
-        {
-            //checkSensor();
-            //this function is mainly for stopping the user from entering a wrong pincode more than 3 times.
-            while (guarding == true && tries < 3)
-            {
-                cout << "Alarm is active" << endl;
-                cout << endl;
-                cout << "Enter pincode " << endl;
-                cin >> usersInput;
-                //usersInput = stoi(getInput());
+        struct User activeUser;
 
-                //If input == any of pincodes saved in file and user isnt blocked => menu.
-                //if not then try again, max 3 tries.
-                logging_in(usersInput, &activeUser, guarding);
-                tries++;
-                if (guarding == true && tries < 3)
-                {
-                    systemLog(4, "Unknown");
-                    cout << "Wrong code, try again!" << endl;
-                    break;
-                }
-            }
-            //3 wrong tries and the system get locked.
-            if (guarding == true && tries == 3)
-            {
-                locked();
-            }
-        }
-        cout << "Alarm is deactivated" << endl;
-        userWelcomeMsg(activeUser);
+        const bool workingAlarm = true; //workingAlarm should never be false.
+        bool guarding = true;
+        string input;
+        int usersInput;
 
-        // A menu or choice for the user.
-        int x;
-        int tries2 = 0;
-        cout << endl;
-        cout << "To activate alarm press 1 then # " << endl;
-        cout << "for configurations press 2 then # " << endl;
-        cin >> x;
-        //x = stoi(getInput());
-        switch (x)
+        //this loop will keep the alarm system program running.
+        while (workingAlarm == true)
         {
-        case 1:
-            while (guarding == false)
+            int tries = 0;
+            //this loop is for deactivating and activating the alarm.
+            //the alarm is active while guarding is true.
+            while (guarding == true)
             {
-                while (guarding == false && tries < 3)
+                //this function is mainly for stopping the user from entering a wrong pincode more than 3 times.
+                while (guarding == true && tries < 3)
                 {
                     cout << endl;
                     cout << "Enter pincode " << endl;
-                    cin >> usersInput;
-                    //usersInput = stoi(getInput());
+                    usersInput = stoi(getInput(&arduino, incomingData));
 
-                    //pincode ok = menu. pincode not ok try again. 3 times
-                    logging_out(usersInput, &activeUser, guarding);
-                    tries2++;
-                    if (guarding == false && tries < 3)
+                    //If input == any of pincodes saved in file and user isnt blocked => menu.
+                    //if not then try again, max 3 tries.
+                    logging_in(usersInput, &activeUser, guarding);
+                    tries++;
+                    if (guarding == true && tries < 3)
                     {
-                        systemLog(6, "Unknown");
-                        cout << "Wrong code, try again!" << endl;
+                        systemLog(4, "Unknown");
+                        cout << "Try again!" << endl;
                         break;
                     }
                 }
-                if (guarding == false && tries == 3)
-                {
-                    locked();
-                }
+                //3 wrong tries and the system get locked.
+                if (guarding == true && tries == 3)
+                    locked(&arduino, incomingData);
             }
-            break;
-
-        case 2:
+            cout << "Alarm is deactivated" << endl;
+            userWelcomeMsg(activeUser);
+            // A menu or choice for the user.
+            int x;
+            int tries2 = 0;
             cout << endl;
-            cout << "this function is unavailable for the moment" << endl;
-            break;
+            cout << "To activate outside and inside alarms press A then your pin code " << endl;
+            cout << "To activate only outside alarm press B then your pin code " << endl;
+            cin >> x;
+            //x = stoi(getInput());
+            switch (x)
+            {
+            case 1:
+                while (guarding == false)
+                {
+                    while (guarding == false && tries < 3)
+                    {
+                        cout << endl;
+                        cout << "For activating alarm ";
+                        cout << "enter pincode " << endl;
+                        usersInput = stoi(getInput(&arduino, incomingData));
 
-        default:
-            cout << "Not a valid choice" << endl;
-            break;
+                        logging_out(usersInput, &activeUser, guarding);
+                        tries2++;
+                        if (guarding == false && tries < 3)
+                        {
+                            systemLog(6, "Unknown");
+                            cout << "Try again!" << endl;
+                            break;
+                        }
+                    }
+                    if (guarding == false && tries2 == 3)
+                    {
+                        locked(&arduino, incomingData);
+                    }
+                }
+                break;
+
+            case 2:
+                cout << endl;
+                cout << "this function is unavailable for the moment" << endl;
+                break;
+
+            default:
+                cout << "Not a valid choice" << endl;
+                break;
+            }
         }
     }
     return 0;

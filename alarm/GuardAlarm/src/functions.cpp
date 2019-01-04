@@ -14,15 +14,12 @@ using namespace std;
 void guardingOff(bool &guarding)
 {
     guarding = false;
-    send("off");
 }
 
 //function for activating the alarm system.
 void guardingOn(bool &guarding)
 {
     guarding = true;
-    checkSensor();
-    send("on");
 }
 
 //this function accepts user input and checks if it matches with any saved pincode from users.dat
@@ -79,6 +76,7 @@ void logging_in(int usersInput, struct User *active, bool &guarding)
                 cout << "User is blocked" << endl;
                 systemLog(9, id);
             }
+            tries--;
         }
     }
     userInfo.close();
@@ -174,16 +172,16 @@ void systemLog(int num, string id)
 }
 
 //function for locking the system after 3 wrong pincode inputs.
-void locked()
+void locked(class SerialPort *arduino, char incomingData[])
 {
-    send("siren");
     cout << "****ALARM****" << endl;
     cout << "Calling Security" << endl;
     systemLog(8, "Unknown");
+    //send("siren");
     for (int i = 0; i < 1;)
     {
         // The system stays in the loop.
-        checkSensor();
+        checkSensor(arduino, incomingData);
     } 
 }
 
@@ -235,6 +233,7 @@ void logging_out(int usersInput, struct User *active, bool &guarding)
                 systemLog(11, id);
             }
         }
+         tries--;
     }
     userInfo.close();
 }

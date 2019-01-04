@@ -13,80 +13,61 @@
 
 using namespace std;
 
-char portNo[] = "\\\\.\\COM5";
-char *port_name = portNo;
-//string for incoming data
-char incomingData[MAX_DATA_LENGTH];
-char output[MAX_DATA_LENGTH];
-//Serial object
-SerialPort arduino(port_name);
-
-string getInput()
+string getInput(class SerialPort *arduino, char incomingData[])
 {
-    //while connected
-    while (arduino.isConnected())
-    {
-        int read_result = arduino.readSerialPort(incomingData, MAX_DATA_LENGTH);
-        if (read_result > 0)
-        {
-            //print out data
-            return incomingData;
-        }
-        else
-            Sleep(1000);
-    }
-    return 0;
+    int read_result = (*arduino).readSerialPort(incomingData, MAX_DATA_LENGTH);
+    if (read_result > 0)
+        return incomingData;
+    return "";
 }
 
-void send(string msg)
+void send(class SerialPort *arduino, string msg)
 {
-
     int msgSent = 1;
 
-    while (arduino.isConnected() && msgSent == 1)
-    {
-        //Creating a c string
-        char *c_string = new char[msg.size() + 1];
-        //copying the string to c string
-        copy(msg.begin(), msg.end(), c_string);
-        //Adding the delimiter
-        c_string[msg.size()] = '\n';
-        //Writing string to arduino
-        arduino.writeSerialPort(c_string, MAX_DATA_LENGTH);
-        //freeing c_string memory
-        delete[] c_string;
-        msgSent++;
-    }
+    //Creating a c string
+    char *c_string = new char[msg.size() + 1];
+    //copying the string to c string
+    copy(msg.begin(), msg.end(), c_string);
+    //Adding the delimiter
+    c_string[msg.size()] = '\n';
+    //Writing string to arduino
+    (*arduino).writeSerialPort(c_string, MAX_DATA_LENGTH);
+    //freeing c_string memory
+    delete[] c_string;
+    msgSent++;
 }
 
-void sensorlocked()
+void sensorlocked(class SerialPort *arduino, char incomingData[])
 {
     cout << "****ALARM****" << endl;
     cout << "Calling Security" << endl;
     for (int i = 0; i < 1;)
     {
-        string sensor = getSensorInfo();
+        string sensor = getSensorInfo(arduino, incomingData);
         if (sensor == "b")
             systemLog("Blue", 0);
         else if (sensor == "r")
             systemLog("Red", 0);
-        Sleep(1000);
+        Sleep(3000);
     } // The system stays in the loop.
 }
 
-void checkSensor()
+void checkSensor(class SerialPort *arduino, char incomingData[])
 {
-    string sensor = getSensorInfo();
+    string sensor = getSensorInfo(arduino, incomingData);
     if (sensor == "b")
     {
         systemLog("Blue", 0);
-        sensorlocked();
+        sensorlocked(arduino, incomingData);
     }
     else if (sensor == "r")
     {
         systemLog("Red", 0);
-        sensorlocked();
+        sensorlocked(arduino, incomingData);
     }
+    else if (sensor == "ok")
+        systemLog("All Sensors", 1);
 }
 
 void systemLog(string sensor, int status)
@@ -124,17 +105,11 @@ void systemLog(string sensor, int status)
     outFile.close();
 }
 
-string getSensorInfo()
+string getSensorInfo(class SerialPort *arduino, char incomingData[])
 {
-    int i = 0;
-    while (arduino.isConnected() && i < 1)
-    {
-        int read_result = arduino.readSerialPort(incomingData, MAX_DATA_LENGTH);
-        if (read_result > 0)
-            return incomingData;
-        else
-            Sleep(1000);
-        i++;
-    }
-    return 0;
+
+    int read_result = (*arduino).readSerialPort(incomingData, MAX_DATA_LENGTH);
+    if (read_result > 0)
+        return incomingData;
+    return "";
 }
