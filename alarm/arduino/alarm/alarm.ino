@@ -4,8 +4,7 @@ int redS = 0;
 String answer;
 String input;
 char key;
-String choice;
-bool guardingOnA = true;
+bool guardingOnA = false;
 bool guardingOnB = false;
 bool guardingOff = false;
 
@@ -19,9 +18,9 @@ char keys[ROWS][COLS] = {
   {'*', '0', '#', 'D'}
 };
 // Connect keypad ROW0, ROW1, ROW2 and ROW3 to these Arduino pins.
-byte rowPins[ROWS] = {12, 11, 10, 9};
+byte rowPins[ROWS] = {12,11,10,9};
 // Connect keypad COL0, COL1 and COL2 to these Arduino pins.
-byte colPins[COLS] = {8, 7, 6, 5};
+byte colPins[COLS] = {8,7,6,5};
 Keypad kpd = Keypad(makeKeymap(keys), rowPins, colPins, ROWS, COLS);
 #define blueSensor 19
 #define redSensor 17
@@ -40,7 +39,9 @@ void setup() {
   Serial.begin(9600);
 }
 
-void loop() {
+void loop() 
+{
+  guardingOnA = true;
   int i = 0;
   while (guardingOnA)
   {
@@ -57,9 +58,11 @@ void loop() {
     if (answer.equals("siren"))
       siren();
     if (answer.equals("off"))
+    {
+      guardingOff = true;
+      guardingOnB = false;
       guardingOnA = false;
-    guardingOff = true;
-    guardingOnB = false;
+    }
   }
   while (guardingOnB)
   {
@@ -75,11 +78,16 @@ void loop() {
     if (answer.equals("siren"))
       siren();
     else if (answer.equals("off"))
+    {
       guardingOnA = false;
+      guardingOnB = false;
+      guardingOff = true;
+    }
   }
   while (guardingOff)
   {
-    usersChoice();
+    char choice = usersChoice();
+    sendPinCode();
     answer = read();
     if (answer.equals("siren"))
       siren();
@@ -118,24 +126,14 @@ void alarmOn_A()
   digitalWrite(yellow, HIGH);
 }
 
-void usersChoice()
+char usersChoice()
 {
+  char choice;
   key = kpd.getKey();
   if (key != NO_KEY)
-  {
-    if (key == 'A' || key == 'B' || key == '0' || key == '1' || key == '2' || key == '3' || key == '4' ||
-        key == '5' || key == '6' || key == '7' || key == '8' || key == '9')
-    {
-      choice += key;
-      keyBuzz(key);
-    }
-    if (choice.length() == 5 || key == '#')
-    {
-      Serial.print(choice);
-      choice = "";
-    }
-
-  }
+    if (key == 'A' || key == 'B')
+      choice = key;
+  return choice;
 }
 
 void sendPinCode()
@@ -150,7 +148,7 @@ void sendPinCode()
       keyBuzz(key);
     }
   }
-  if (input.length() == 4 || key == '#')
+  if (input.length() == 4)
   {
     Serial.print(input);
     input = "";

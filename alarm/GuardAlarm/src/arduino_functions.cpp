@@ -16,15 +16,16 @@ using namespace std;
 string getInput(class SerialPort *arduino, char incomingData[])
 {
     int read_result = (*arduino).readSerialPort(incomingData, MAX_DATA_LENGTH);
+    while (incomingData == "r" || incomingData == "b")
+        return "";
     if (read_result > 0)
         return incomingData;
+
     return "";
 }
 
 void send(class SerialPort *arduino, string msg)
 {
-    int msgSent = 1;
-
     //Creating a c string
     char *c_string = new char[msg.size() + 1];
     //copying the string to c string
@@ -35,7 +36,6 @@ void send(class SerialPort *arduino, string msg)
     (*arduino).writeSerialPort(c_string, MAX_DATA_LENGTH);
     //freeing c_string memory
     delete[] c_string;
-    msgSent++;
 }
 
 void sensorlocked(class SerialPort *arduino, char incomingData[])

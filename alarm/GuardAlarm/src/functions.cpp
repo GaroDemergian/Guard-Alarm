@@ -11,20 +11,22 @@
 using namespace std;
 
 //function for diactivating the alarm system.
-void guardingOff(bool &guarding)
+void guardingOff(class SerialPort *arduino, bool &guarding)
 {
+    send(arduino, "off");
     guarding = false;
 }
 
 //function for activating the alarm system.
-void guardingOn(bool &guarding)
+void guardingOn(class SerialPort *arduino, bool &guarding)
 {
+    send(arduino, "on");
     guarding = true;
 }
 
 //this function accepts user input and checks if it matches with any saved pincode from users.dat
 //allows to user to deactivate the alarm system
-void logging_in(int usersInput, struct User *active, bool &guarding)
+void logging_in(class SerialPort *arduino, int usersInput, struct User *active, bool &guarding)
 {
     int tries = 2;
     ifstream userInfo;
@@ -56,7 +58,7 @@ void logging_in(int usersInput, struct User *active, bool &guarding)
                 (*active).userID = stoi(id);
                 (*active).pincode = stoi(pin);
                 (*active).status = Active;
-                guardingOff(guarding);
+                guardingOff(arduino, guarding);
                 if (usersInput == stoi(pin))
                 {
                     systemLog(1, id);
@@ -177,7 +179,7 @@ void locked(class SerialPort *arduino, char incomingData[])
     cout << "****ALARM****" << endl;
     cout << "Calling Security" << endl;
     systemLog(8, "Unknown");
-    //send("siren");
+    send(arduino, "siren");
     for (int i = 0; i < 1;)
     {
         // The system stays in the loop.
@@ -187,7 +189,7 @@ void locked(class SerialPort *arduino, char incomingData[])
 
 //this function accepts user input and checks if it matches with any saved pincode from users.dat
 //allows to user to activate the alarm system
-void logging_out(int usersInput, struct User *active, bool &guarding)
+void logging_out(class SerialPort *arduino, int usersInput, struct User *active, bool &guarding)
 {
     int tries = 2;
     ifstream userInfo;
@@ -211,7 +213,7 @@ void logging_out(int usersInput, struct User *active, bool &guarding)
             if (usersInput == stoi(pin) && (status != "3"))
             {
                 userInfo.close();
-                guardingOn(guarding);
+                guardingOn(arduino, guarding);
                 systemLog(2, id);
                 break;
             }
@@ -219,7 +221,7 @@ void logging_out(int usersInput, struct User *active, bool &guarding)
             else if (usersInput == (stoi(pin) + 1) && (status != "3"))
             {
                 userInfo.close();
-                guardingOn(guarding);
+                guardingOn(arduino, guarding);
                 systemLog(10, id);
                 cout << "Calling security" << endl;
                 break;

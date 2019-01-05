@@ -4,7 +4,7 @@
 using namespace std;
 
 string getInput(class SerialPort *arduino, char incomingData[]);
-void send(string msg);
+void send(class SerialPort *arduino, string msg);
 void sensorlocked(class SerialPort *arduino, char incomingData[]);
 void checkSensor(class SerialPort *arduino, char incomingData[]);
 void systemLog(string sensor, int status);

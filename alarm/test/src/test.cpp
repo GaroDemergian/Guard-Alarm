@@ -45,8 +45,6 @@ int main()
                 cout << "enter pincode" << endl;
                 i++;
             }
-
-
             input = getInput();
             checkSensor();
             if (input.length() > 0)
