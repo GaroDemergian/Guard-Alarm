@@ -5,6 +5,7 @@
 #include <time.h>
 #include <cstdio>
 #include <cstdlib>
+#include <windows.h>
 
 #include "functions.h"
 #include "User.h"
@@ -182,6 +183,7 @@ void locked(class SerialPort *arduino)
     send(arduino, "siren");
     for (int i = 0; i < 1;)
     {
+        Sleep(10000);
         // The system stays in the loop.
     } 
 }

@@ -1,4 +1,6 @@
 #include <Keypad.h>
+#include "Metro.h"
+
 int blueS = 0;
 int redS = 0;
 String answer;
@@ -7,15 +9,22 @@ char key;
 bool guardingOnA = true;
 bool guardingOnB;
 bool guardingOff;
+Metro blinkRed = Metro(200);
+Metro blinkGreen = Metro(1000);
+Metro timeElapsed = Metro(3000);
+bool redOn = LOW;
+bool greenOn = LOW;
+bool yellowOn = LOW;
 
 const byte ROWS = 4; // Four rows
 const byte COLS = 4; // Four columns
 // Define the Keymap
 char keys[ROWS][COLS] = {
-    {'1', '2', '3', 'A'},
-    {'4', '5', '6', 'B'},
-    {'7', '8', '9', 'C'},
-    {'*', '0', '#', 'D'}};
+  {'1', '2', '3', 'A'},
+  {'4', '5', '6', 'B'},
+  {'7', '8', '9', 'C'},
+  {'*', '0', '#', 'D'}
+};
 // Connect keypad ROW0, ROW1, ROW2 and ROW3 to these Arduino pins.
 byte rowPins[ROWS] = {12, 11, 10, 9};
 // Connect keypad COL0, COL1 and COL2 to these Arduino pins.
@@ -27,6 +36,7 @@ Keypad kpd = Keypad(makeKeymap(keys), rowPins, colPins, ROWS, COLS);
 #define yellow 3
 #define buzzer 13
 #define green 4
+
 
 void setup()
 {
@@ -41,51 +51,74 @@ void setup()
 
 void loop()
 {
- 
-  int i = 0;
-  while (guardingOnA) 
+  
+  while (guardingOnA)
   {
-    while (i < 1)
+    if (blinkRed.check())
     {
-      alarmOn_A();
-      i++;
+      redOn = !redOn;
+      digitalWrite(red, redOn);
+      tone(buzzer, 700, 50);
     }
-    blueS = digitalRead(blueSensor);
-    redS = digitalRead(redSensor);
-    sensorStatus();
-    sendPinCode();
-    answer = read();
-    if (answer.equals("siren"))
-      siren();
-    if (answer.equals("off"))
+    
+    if (timeElapsed.check())
     {
-      guardingOff = true;
-      guardingOnB = false;
-      guardingOnA = false;
+      digitalWrite(yellow, HIGH);
+      digitalWrite(green, HIGH);
+      while (guardingOnA)
+      {
+        blueS = digitalRead(blueSensor);
+        redS = digitalRead(redSensor);
+        sensorStatus();
+        sendPinCode();
+        answer = read();
+        if (answer.equals("siren"))
+          siren();
+        if (answer.equals("off"))
+        {
+          guardingOff = true;
+          guardingOnB = false;
+          guardingOnA = false;
+          break;
+        }
+      }
     }
   }
   while (guardingOnB)
   {
-    while (i < 1)
+    if (blinkRed.check())
     {
-      //alarmOn_B();
-      i++;
+      redOn = !redOn;
+      digitalWrite(red, redOn);
+      tone(buzzer, 700, 50);
     }
-    blueS = digitalRead(blueSensor);
-    sensorStatus_B();
-    sendPinCode();
-    answer = read();
-    if (answer.equals("siren"))
-      siren();
-    else if (answer.equals("off"))
+    if (timeElapsed.check())
     {
-      guardingOnA = false;
-      guardingOnB = false;
-      guardingOff = true;
-      break;
+      digitalWrite(yellow, HIGH);
+      while (guardingOnB)
+      {
+        blueS = digitalRead(blueSensor);
+        sensorStatus_B();
+        sendPinCode();
+        answer = read();
+        if (blinkGreen.check())
+        {
+          greenOn = !greenOn;
+          digitalWrite(green, greenOn);
+        }
+        if (answer.equals("siren"))
+          siren();
+        else if (answer.equals("off"))
+        {
+          guardingOnA = false;
+          guardingOnB = false;
+          guardingOff = true;
+          break;
+        }
+      }
     }
   }
-  i = 0;
+  int i = 0;
   while (guardingOff)
   {
     while (i < 1)
@@ -93,7 +126,7 @@ void loop()
       alarmOff();
       i++;
     }
-    
+
     String choice = usersChoice();
     while (choice == "A" || choice == "B")
     {
@@ -118,6 +151,7 @@ void loop()
       }
     }
   }
+  i = 0;
 }
 
 void alarmOff()
@@ -172,7 +206,7 @@ void sendPinCode()
       keyBuzz(key);
     }
   }
-  if (input.length() == 4)
+  if (input.length() > 4 || key == '#')
   {
     Serial.print(input);
     input = "";
@@ -241,60 +275,60 @@ void keyBuzz(char key)
   {
     switch (key)
     {
-    case '1':
-      tone(buzzer, 261);
-      delay(100);
-      pinMode(buzzer, LOW);
-      break;
-    case '2':
-      tone(buzzer, 294);
-      delay(100);
-      pinMode(buzzer, LOW);
-      break;
-    case '3':
-      tone(buzzer, 329);
-      delay(100);
-      pinMode(buzzer, LOW);
-      break;
-    case '4':
-      tone(buzzer, 349);
-      delay(100);
-      pinMode(buzzer, LOW);
-      break;
-    case '5':
-      tone(buzzer, 392);
-      delay(100);
-      pinMode(buzzer, LOW);
-      break;
-    case '6':
-      tone(buzzer, 440);
-      delay(100);
-      pinMode(buzzer, LOW);
-      break;
-    case '7':
-      tone(buzzer, 493);
-      delay(100);
-      pinMode(buzzer, LOW);
-      break;
-    case '8':
-      tone(buzzer, 523);
-      delay(100);
-      pinMode(buzzer, LOW);
-      break;
-    case '9':
-      tone(buzzer, 588);
-      delay(100);
-      pinMode(buzzer, LOW);
-      break;
-    case '0':
-      tone(buzzer, 660);
-      delay(100);
-      pinMode(buzzer, LOW);
-      break;
-    default:
-      tone(buzzer, 660);
-      delay(100);
-      pinMode(buzzer, LOW);
+      case '1':
+        tone(buzzer, 261);
+        delay(100);
+        pinMode(buzzer, LOW);
+        break;
+      case '2':
+        tone(buzzer, 294);
+        delay(100);
+        pinMode(buzzer, LOW);
+        break;
+      case '3':
+        tone(buzzer, 329);
+        delay(100);
+        pinMode(buzzer, LOW);
+        break;
+      case '4':
+        tone(buzzer, 349);
+        delay(100);
+        pinMode(buzzer, LOW);
+        break;
+      case '5':
+        tone(buzzer, 392);
+        delay(100);
+        pinMode(buzzer, LOW);
+        break;
+      case '6':
+        tone(buzzer, 440);
+        delay(100);
+        pinMode(buzzer, LOW);
+        break;
+      case '7':
+        tone(buzzer, 493);
+        delay(100);
+        pinMode(buzzer, LOW);
+        break;
+      case '8':
+        tone(buzzer, 523);
+        delay(100);
+        pinMode(buzzer, LOW);
+        break;
+      case '9':
+        tone(buzzer, 588);
+        delay(100);
+        pinMode(buzzer, LOW);
+        break;
+      case '0':
+        tone(buzzer, 660);
+        delay(100);
+        pinMode(buzzer, LOW);
+        break;
+      default:
+        tone(buzzer, 660);
+        delay(100);
+        pinMode(buzzer, LOW);
     }
   }
 }

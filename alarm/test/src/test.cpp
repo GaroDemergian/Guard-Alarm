@@ -26,13 +26,27 @@ void checkSensor();
 
 int main()
 {
+    bool on = true;
+    bool b;
+    bool off;
+    while (on)
+    {
+        checkSensor();
+        string i = getInput();
+        if (i.length() > 0)
+        {
+            int num = stoi(i);
+            cout<<  num <<endl;
+            send("off");
+            on = false;
+            off = true;
+        }
+        Sleep(1000);
+    }
 
-     send("on");
-     Sleep(3000);
-     send("off");
-     Sleep(10000);
-     send("siren");
-
+    send("off");
+    Sleep(10000);
+    send("siren");
 
     return 0;
 }

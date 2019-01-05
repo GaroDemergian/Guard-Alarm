@@ -13,19 +13,28 @@
 
 using namespace std;
 
-string getInput(class SerialPort *arduino, char incomingData[])
+string getInput(class SerialPort *arduino)
 {
+    //string for incoming data
+    char incomingData[MAX_DATA_LENGTH];
+    
+    string sensor;
+    string empty = "";
     int read_result = (*arduino).readSerialPort(incomingData, MAX_DATA_LENGTH);
-    while (incomingData == "r" || incomingData == "b")
-        return "";
-    if (read_result > 0)
+    if  (read_result == 1)
+    {
+        checkSensor(arduino, incomingData);
+    }
+    else if (read_result == 4)
         return incomingData;
-
-    return "";
+    
+    return empty;
 }
 
 void send(class SerialPort *arduino, string msg)
 {
+    char output[MAX_DATA_LENGTH];
+
     //Creating a c string
     char *c_string = new char[msg.size() + 1];
     //copying the string to c string
@@ -38,13 +47,13 @@ void send(class SerialPort *arduino, string msg)
     delete[] c_string;
 }
 
-void sensorlocked(class SerialPort *arduino, char incomingData[])
+void sensorlocked(class SerialPort *arduino)
 {
     cout << "****ALARM****" << endl;
     cout << "Calling Security" << endl;
     for (int i = 0; i < 1;)
     {
-        string sensor = getSensorInfo(arduino, incomingData);
+        string sensor = getSensorInfo(arduino);
         if (sensor == "b")
             systemLog("Blue", 0);
         else if (sensor == "r")
@@ -53,18 +62,17 @@ void sensorlocked(class SerialPort *arduino, char incomingData[])
     } // The system stays in the loop.
 }
 
-void checkSensor(class SerialPort *arduino, char incomingData[])
+void checkSensor(class SerialPort *arduino, string sensor)
 {
-    string sensor = getSensorInfo(arduino, incomingData);
     if (sensor == "b")
     {
         systemLog("Blue", 0);
-        sensorlocked(arduino, incomingData);
+        sensorlocked(arduino);
     }
     else if (sensor == "r")
     {
         systemLog("Red", 0);
-        sensorlocked(arduino, incomingData);
+        sensorlocked(arduino);
     }
     else if (sensor == "ok")
         systemLog("All Sensors", 1);
@@ -105,9 +113,9 @@ void systemLog(string sensor, int status)
     outFile.close();
 }
 
-string getSensorInfo(class SerialPort *arduino, char incomingData[])
+string getSensorInfo(class SerialPort *arduino)
 {
-
+    char incomingData[MAX_DATA_LENGTH];
     int read_result = (*arduino).readSerialPort(incomingData, MAX_DATA_LENGTH);
     if (read_result > 0)
         return incomingData;

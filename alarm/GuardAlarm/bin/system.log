@@ -60,3 +60,130 @@
 60;20190105 02:40:20;1;;Alarm activated
 61;20190105 02:42:39;4;;Alarm deactivated
 62;20190105 02:42:45;1;;Alarm activated
+63;20190105 14:35:43;1;;Alarm deactivated
+64;20190105 14:36:07;1;;Alarm activated
+65;20190105 14:58:27;1;;Alarm deactivated
+66;20190105 14:58:28;1;;Alarm activated
+67;20190105 14:58:29;1;;Alarm deactivated
+68;20190105 14:58:30;1;;Alarm activated
+69;20190105 14:58:32;1;;Alarm deactivated
+70;20190105 14:58:33;1;;Alarm activated
+71;20190105 14:58:34;1;;Alarm deactivated
+72;20190105 14:58:35;1;;Alarm activated
+73;20190105 14:58:36;1;;Alarm deactivated
+74;20190105 14:59:15;1;;Alarm deactivated
+75;20190105 14:59:16;1;;Alarm activated
+76;20190105 14:59:17;1;;Alarm deactivated
+77;20190105 14:59:18;1;;Alarm activated
+78;20190105 15:00:55;1;;Alarm deactivated
+79;20190105 15:00:56;1;;Alarm activated
+80;20190105 15:00:58;1;;Alarm deactivated
+81;20190105 15:02:15;1;;Alarm deactivated
+82;20190105 15:02:16;1;;Alarm activated
+83;20190105 15:02:17;1;;Alarm deactivated
+84;20190105 15:02:18;1;;Alarm activated
+85;20190105 15:02:20;1;;Alarm deactivated
+86;20190105 15:06:12;1;;Alarm deactivated
+87;20190105 15:06:13;1;;Alarm activated
+88;20190105 15:06:17;1;;Alarm deactivated
+89;20190105 15:06:19;1;;Alarm activated
+90;20190105 15:06:23;1;;Alarm deactivated
+91;20190105 15:06:24;1;;Alarm activated
+92;20190105 15:11:46;1;;Alarm deactivated
+93;20190105 15:11:48;1;;Alarm activated
+94;20190105 15:11:49;1;;Alarm deactivated
+95;20190105 15:11:50;1;;Alarm activated
+96;20190105 15:11:51;1;;Alarm deactivated
+97;20190105 15:15:04;3;;Blocked user attempted alarm deactivation
+98;20190105 15:15:04;Unknown;;Failed to deactivate alarm
+99;20190105 15:15:04;3;;Blocked user attempted alarm deactivation
+100;20190105 15:15:04;Unknown;;Failed to deactivate alarm
+101;20190105 15:15:04;3;;Blocked user attempted alarm deactivation
+102;20190105 15:15:05;Unknown;;3 failed attempts/System locked!
+103;20190105 15:25:18;Unknown;;Failed to deactivate alarm
+104;20190105 15:25:25;Unknown;;Failed to deactivate alarm
+105;20190105 15:25:29;5;;Alarm deactivated
+106;20190105 15:25:48;1;;Alarm activated
+107;20190105 15:26:09;Unknown;;Failed to deactivate alarm
+108;20190105 15:26:18;Unknown;;Failed to deactivate alarm
+109;20190105 15:26:22;Unknown;;3 failed attempts/System locked!
+110;20190105 15:26:40;1;;Alarm deactivated/police notified
+111;20190105 15:26:53;5;;Alarm activated
+112;20190105 15:27:04;Unknown;;Failed to deactivate alarm
+113;20190105 15:27:07;1;;Alarm deactivated
+114;20190105 15:27:18;1;;Alarm activated
+115;20190105 16:01:12;Unknown;;Failed to deactivate alarm
+116;20190105 16:01:47;1;;Alarm deactivated
+117;20190105 16:02:01;1;;Alarm activated
+118;20190105 16:02:10;5;;Alarm deactivated
+119;20190105 16:02:53;1;;Alarm deactivated
+120;20190105 16:03:02;5;;Alarm activated
+121;20190105 16:05:29;1;;Alarm deactivated
+122;20190105 16:05:43;1;;Alarm activated
+123;20190105 17:49:37;1;;Alarm deactivated
+124;20190105 17:50:14;1;;Alarm activated
+125;20190105 17:50:26;5;;Alarm deactivated
+126;20190105 17:50:35;1;;Alarm activated
+127;20190105 17:53:32;5;;Alarm deactivated
+128;20190105 17:53:33;5;;Alarm activated
+129;20190105 17:53:35;5;;Alarm deactivated
+130;20190105 17:53:36;5;;Alarm activated
+131;20190105 17:53:37;5;;Alarm deactivated
+132;20190105 17:53:38;5;;Alarm activated
+133;20190105 17:53:40;5;;Alarm deactivated
+134;20190105 17:53:41;5;;Alarm activated
+135;20190105 17:53:42;5;;Alarm deactivated
+136;20190105 17:53:43;5;;Alarm activated
+137;20190105 17:53:44;5;;Alarm deactivated
+138;20190105 17:53:46;5;;Alarm activated
+139;20190105 17:53:47;5;;Alarm deactivated
+140;20190105 17:53:48;5;;Alarm activated
+141;20190105 17:53:49;5;;Alarm deactivated
+142;20190105 17:53:50;5;;Alarm activated
+143;20190105 17:56:03;5;;Alarm deactivated
+144;20190105 17:56:04;5;;Alarm activated
+145;20190105 17:56:06;5;;Alarm deactivated
+146;20190105 17:56:07;5;;Alarm activated
+147;20190105 17:56:08;5;;Alarm deactivated
+148;20190105 17:56:09;5;;Alarm activated
+149;20190105 17:56:10;5;;Alarm deactivated
+150;20190105 17:56:12;5;;Alarm activated
+151;20190105 17:57:36;Unknown;;Failed to deactivate alarm
+152;20190105 17:57:36;Unknown;;Failed to deactivate alarm
+153;20190105 17:57:37;Unknown;;3 failed attempts/System locked!
+154;20190105 17:59:03;5;;Alarm deactivated
+155;20190105 17:59:04;5;;Alarm activated
+156;20190105 17:59:05;5;;Alarm deactivated
+157;20190105 17:59:06;5;;Alarm activated
+158;20190105 18:00:18;5;;Alarm deactivated
+159;20190105 18:00:19;5;;Alarm activated
+160;20190105 18:00:20;5;;Alarm deactivated
+161;20190105 18:00:21;5;;Alarm activated
+162;20190105 18:00:22;5;;Alarm deactivated
+163;20190105 18:03:43;5;;Alarm deactivated
+164;20190105 18:03:44;5;;Alarm activated
+165;20190105 18:03:45;5;;Alarm deactivated
+166;20190105 18:03:47;5;;Alarm activated
+167;20190105 18:09:05;5;;Alarm deactivated
+168;20190105 18:11:02;1;;Alarm deactivated
+169;20190105 18:11:13;1;;Alarm activated
+170;20190105 18:13:18;5;;Alarm deactivated
+171;20190105 18:13:28;1;;Alarm activated
+172;20190105 18:16:13;1;;Alarm deactivated
+173;20190105 18:26:07;1;;Alarm deactivated
+174;20190105 18:26:15;1;;Alarm activated
+175;20190105 18:56:35;Unknown;;Failed to deactivate alarm
+176;20190105 18:58:02;1;;Alarm deactivated
+177;20190105 18:58:19;1;;Alarm activated
+178;20190105 19:07:49;1;;Alarm deactivated
+179;20190105 19:08:31;Unknown;;Failed to deactivate alarm
+180;20190105 19:08:36;Unknown;;Failed to deactivate alarm
+181;20190105 19:08:41;Unknown;;3 failed attempts/System locked!
+182;20190105 19:09:32;1;;Alarm deactivated
+183;20190105 19:09:51;1;;Alarm activated
+184;20190105 19:17:44;5;;Alarm deactivated
+185;20190105 19:18:02;1;;Alarm activated
+186;20190105 19:18:16;4;;Alarm deactivated
+187;20190105 19:18:33;4;;Alarm activated
+188;20190105 19:19:35;5;;Alarm deactivated
+189;20190105 19:20:32;5;;Alarm activated
