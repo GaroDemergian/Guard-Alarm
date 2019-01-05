@@ -1,8 +1,2 @@
-to compile and run write on your terminal: 
+to compile and run write in terminal: 
 ./make run
-
-
-commands available:
-make
-make run
-make clean
