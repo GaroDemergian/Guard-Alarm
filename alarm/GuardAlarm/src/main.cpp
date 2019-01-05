@@ -42,6 +42,7 @@ int main()
         //this loop will keep the alarm system program running.
         while (workingAlarm == true)
         {
+            send(&arduino, "on");
             int tries = 0;
             //this loop is for deactivating and activating the alarm.
             //the alarm is active while guarding is true.
@@ -63,7 +64,7 @@ int main()
                         usersInput = stoi(input);
                         //If input == any of pincodes saved in file and user isnt blocked => menu.
                         //if not then try again, max 3 tries.
-                        logging_in(&arduino, usersInput, &activeUser, guarding);
+                        logging_in(usersInput, &activeUser, guarding);
                         tries++;
                         if (guarding == true && tries < 3)
                         {
@@ -76,7 +77,7 @@ int main()
                 }
                 //3 wrong tries and the system get locked.
                 if (guarding == true && tries == 3)
-                    locked(&arduino, incomingData);
+                    locked(&arduino);
             }
             cout << "Alarm is deactivated" << endl;
             userWelcomeMsg(activeUser);
@@ -87,38 +88,34 @@ int main()
             //x = stoi(getInput());
             while (guarding == false)
             {
-                while (guarding == false && tries < 3)
+                send(&arduino, "off");
+                cout << endl;
+                cout << "To activate outside and inside alarms press A then your pin code " << endl;
+                cout << "To activate only outside alarm press B then your pin code " << endl;
+                while (guarding == false && tries2 < 3)
                 {
-                    cout << endl;
-                    cout << "To activate outside and inside alarms press A then your pin code " << endl;
-                    cout << "To activate only outside alarm press B then your pin code " << endl;
-                    while (guarding == false)
+                    input = getInput(&arduino, incomingData);
+                    if (input.length() > 0)
                     {
-                        input = getInput(&arduino, incomingData);
-                        if (input.length() > 0)
+                        usersInput = stoi(input);
+                        //If input == any of pincodes saved in file and user isnt blocked => menu.
+                        //if not then try again, max 3 tries.
+                        logging_out(usersInput, &activeUser, guarding);
+                        tries2++;
+                        if (guarding == false && tries < 3)
                         {
-                            usersInput = stoi(input);
-                            //If input == any of pincodes saved in file and user isnt blocked => menu.
-                            //if not then try again, max 3 tries.
-                            logging_in(&arduino, usersInput, &activeUser, guarding);
+                            systemLog(6, "Unknown");
+                            cout << "Try again!" << endl;
+                            break;
                         }
-                        Sleep(1000);
                     }
-                    logging_out(&arduino, usersInput, &activeUser, guarding);
-                    tries2++;
-                    if (guarding == false && tries < 3)
-                    {
-                        systemLog(6, "Unknown");
-                        cout << "Try again!" << endl;
-                        break;
-                    }
+                    Sleep(1000);
                 }
                 if (guarding == false && tries2 == 3)
                 {
-                    locked(&arduino, incomingData);
+                    locked(&arduino);
                 }
             }
-            break;
         }
     }
     return 0;

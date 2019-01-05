@@ -4,23 +4,22 @@ int redS = 0;
 String answer;
 String input;
 char key;
-bool guardingOnA = false;
-bool guardingOnB = false;
-bool guardingOff = false;
+bool guardingOnA = true;
+bool guardingOnB;
+bool guardingOff;
 
 const byte ROWS = 4; // Four rows
 const byte COLS = 4; // Four columns
 // Define the Keymap
 char keys[ROWS][COLS] = {
-  {'1', '2', '3', 'A'},
-  {'4', '5', '6', 'B'},
-  {'7', '8', '9', 'C'},
-  {'*', '0', '#', 'D'}
-};
+    {'1', '2', '3', 'A'},
+    {'4', '5', '6', 'B'},
+    {'7', '8', '9', 'C'},
+    {'*', '0', '#', 'D'}};
 // Connect keypad ROW0, ROW1, ROW2 and ROW3 to these Arduino pins.
-byte rowPins[ROWS] = {12,11,10,9};
+byte rowPins[ROWS] = {12, 11, 10, 9};
 // Connect keypad COL0, COL1 and COL2 to these Arduino pins.
-byte colPins[COLS] = {8,7,6,5};
+byte colPins[COLS] = {8, 7, 6, 5};
 Keypad kpd = Keypad(makeKeymap(keys), rowPins, colPins, ROWS, COLS);
 #define blueSensor 19
 #define redSensor 17
@@ -29,7 +28,8 @@ Keypad kpd = Keypad(makeKeymap(keys), rowPins, colPins, ROWS, COLS);
 #define buzzer 13
 #define green 4
 
-void setup() {
+void setup()
+{
   pinMode(buzzer, OUTPUT);
   pinMode(blueSensor, INPUT);
   pinMode(redSensor, INPUT);
@@ -39,11 +39,11 @@ void setup() {
   Serial.begin(9600);
 }
 
-void loop() 
+void loop()
 {
-  guardingOnA = true;
+ 
   int i = 0;
-  while (guardingOnA)
+  while (guardingOnA) 
   {
     while (i < 1)
     {
@@ -68,11 +68,11 @@ void loop()
   {
     while (i < 1)
     {
-      alarmOn_B();
+      //alarmOn_B();
       i++;
     }
     blueS = digitalRead(blueSensor);
-    sensorStatus();
+    sensorStatus_B();
     sendPinCode();
     answer = read();
     if (answer.equals("siren"))
@@ -82,23 +82,45 @@ void loop()
       guardingOnA = false;
       guardingOnB = false;
       guardingOff = true;
+      break;
     }
   }
+  i = 0;
   while (guardingOff)
   {
-    char choice = usersChoice();
-    sendPinCode();
-    answer = read();
-    if (answer.equals("siren"))
-      siren();
-    else if (answer.equals("on") && choice == 'A')
-      guardingOnA = true;
-    else if (answer.equals("on") && choice == 'B')
-      guardingOnB = true;
+    while (i < 1)
+    {
+      alarmOff();
+      i++;
+    }
+    
+    String choice = usersChoice();
+    while (choice == "A" || choice == "B")
+    {
+      sendPinCode();
+      answer = read();
+      if (answer.length() > 0)
+      {
+        if (answer.equals("siren"))
+          siren();
+        else if (choice.equals("A") && answer.equals("on"))
+        {
+          guardingOnA = true;
+          guardingOff = false;
+          break;
+        }
+        else if (choice.equals("B") && answer.equals("on"))
+        {
+          guardingOnB = true;
+          guardingOff = false;
+          break;
+        }
+      }
+    }
   }
 }
 
-void alarmOn_B()
+void alarmOff()
 {
   tone(buzzer, 700);
   delay(200);
@@ -107,6 +129,8 @@ void alarmOn_B()
   tone(buzzer, 700);
   delay(200);
   pinMode(buzzer, LOW);
+  digitalWrite(green, LOW);
+  digitalWrite(yellow, LOW);
 }
 void alarmOn_A()
 {
@@ -126,14 +150,14 @@ void alarmOn_A()
   digitalWrite(yellow, HIGH);
 }
 
-char usersChoice()
+String usersChoice()
 {
-  char choice;
+  String z;
   key = kpd.getKey();
   if (key != NO_KEY)
     if (key == 'A' || key == 'B')
-      choice = key;
-  return choice;
+      z = key;
+  return z;
 }
 
 void sendPinCode()
@@ -163,6 +187,8 @@ String read()
     String answer = Serial.readStringUntil('\n');
     return answer;
   }
+  else
+    return "";
 }
 void sensorStatus()
 {
@@ -174,6 +200,14 @@ void sensorStatus()
   if (redS == 1)
   {
     Serial.write("r");
+    siren();
+  }
+}
+void sensorStatus_B()
+{
+  if (blueS == 1)
+  {
+    Serial.write("b");
     siren();
   }
 }
@@ -207,60 +241,60 @@ void keyBuzz(char key)
   {
     switch (key)
     {
-      case '1':
-        tone(buzzer, 261);
-        delay(100);
-        pinMode(buzzer, LOW);
-        break;
-      case '2':
-        tone(buzzer, 294);
-        delay(100);
-        pinMode(buzzer, LOW);
-        break;
-      case '3':
-        tone(buzzer, 329);
-        delay(100);
-        pinMode(buzzer, LOW);
-        break;
-      case '4':
-        tone(buzzer, 349);
-        delay(100);
-        pinMode(buzzer, LOW);
-        break;
-      case '5':
-        tone(buzzer, 392);
-        delay(100);
-        pinMode(buzzer, LOW);
-        break;
-      case '6':
-        tone(buzzer, 440);
-        delay(100);
-        pinMode(buzzer, LOW);
-        break;
-      case '7':
-        tone(buzzer, 493);
-        delay(100);
-        pinMode(buzzer, LOW);
-        break;
-      case '8':
-        tone(buzzer, 523);
-        delay(100);
-        pinMode(buzzer, LOW);
-        break;
-      case '9':
-        tone(buzzer, 588);
-        delay(100);
-        pinMode(buzzer, LOW);
-        break;
-      case '0':
-        tone(buzzer, 660);
-        delay(100);
-        pinMode(buzzer, LOW);
-        break;
-      default:
-        tone(buzzer, 660);
-        delay(100);
-        pinMode(buzzer, LOW);
+    case '1':
+      tone(buzzer, 261);
+      delay(100);
+      pinMode(buzzer, LOW);
+      break;
+    case '2':
+      tone(buzzer, 294);
+      delay(100);
+      pinMode(buzzer, LOW);
+      break;
+    case '3':
+      tone(buzzer, 329);
+      delay(100);
+      pinMode(buzzer, LOW);
+      break;
+    case '4':
+      tone(buzzer, 349);
+      delay(100);
+      pinMode(buzzer, LOW);
+      break;
+    case '5':
+      tone(buzzer, 392);
+      delay(100);
+      pinMode(buzzer, LOW);
+      break;
+    case '6':
+      tone(buzzer, 440);
+      delay(100);
+      pinMode(buzzer, LOW);
+      break;
+    case '7':
+      tone(buzzer, 493);
+      delay(100);
+      pinMode(buzzer, LOW);
+      break;
+    case '8':
+      tone(buzzer, 523);
+      delay(100);
+      pinMode(buzzer, LOW);
+      break;
+    case '9':
+      tone(buzzer, 588);
+      delay(100);
+      pinMode(buzzer, LOW);
+      break;
+    case '0':
+      tone(buzzer, 660);
+      delay(100);
+      pinMode(buzzer, LOW);
+      break;
+    default:
+      tone(buzzer, 660);
+      delay(100);
+      pinMode(buzzer, LOW);
     }
   }
 }

@@ -3,6 +3,8 @@
 #include <string>
 #include <cstring>
 #include <time.h>
+#include <cstdio>
+#include <cstdlib>
 
 #include "functions.h"
 #include "User.h"
@@ -11,22 +13,20 @@
 using namespace std;
 
 //function for diactivating the alarm system.
-void guardingOff(class SerialPort *arduino, bool &guarding)
+void guardingOff( bool &guarding)
 {
-    send(arduino, "off");
     guarding = false;
 }
 
 //function for activating the alarm system.
-void guardingOn(class SerialPort *arduino, bool &guarding)
+void guardingOn(bool &guarding)
 {
-    send(arduino, "on");
     guarding = true;
 }
 
 //this function accepts user input and checks if it matches with any saved pincode from users.dat
 //allows to user to deactivate the alarm system
-void logging_in(class SerialPort *arduino, int usersInput, struct User *active, bool &guarding)
+void logging_in(int usersInput, struct User *active, bool &guarding)
 {
     int tries = 2;
     ifstream userInfo;
@@ -58,7 +58,7 @@ void logging_in(class SerialPort *arduino, int usersInput, struct User *active, 
                 (*active).userID = stoi(id);
                 (*active).pincode = stoi(pin);
                 (*active).status = Active;
-                guardingOff(arduino, guarding);
+                guardingOff(guarding);
                 if (usersInput == stoi(pin))
                 {
                     systemLog(1, id);
@@ -174,7 +174,7 @@ void systemLog(int num, string id)
 }
 
 //function for locking the system after 3 wrong pincode inputs.
-void locked(class SerialPort *arduino, char incomingData[])
+void locked(class SerialPort *arduino)
 {
     cout << "****ALARM****" << endl;
     cout << "Calling Security" << endl;
@@ -183,13 +183,12 @@ void locked(class SerialPort *arduino, char incomingData[])
     for (int i = 0; i < 1;)
     {
         // The system stays in the loop.
-        checkSensor(arduino, incomingData);
     } 
 }
 
 //this function accepts user input and checks if it matches with any saved pincode from users.dat
 //allows to user to activate the alarm system
-void logging_out(class SerialPort *arduino, int usersInput, struct User *active, bool &guarding)
+void logging_out(int usersInput, struct User *active, bool &guarding)
 {
     int tries = 2;
     ifstream userInfo;
@@ -213,7 +212,7 @@ void logging_out(class SerialPort *arduino, int usersInput, struct User *active,
             if (usersInput == stoi(pin) && (status != "3"))
             {
                 userInfo.close();
-                guardingOn(arduino, guarding);
+                guardingOn(guarding);
                 systemLog(2, id);
                 break;
             }
@@ -221,7 +220,7 @@ void logging_out(class SerialPort *arduino, int usersInput, struct User *active,
             else if (usersInput == (stoi(pin) + 1) && (status != "3"))
             {
                 userInfo.close();
-                guardingOn(arduino, guarding);
+                guardingOn(guarding);
                 systemLog(10, id);
                 cout << "Calling security" << endl;
                 break;

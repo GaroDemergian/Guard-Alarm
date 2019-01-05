@@ -27,93 +27,12 @@ void checkSensor();
 int main()
 {
 
-    string choice;
-    int pin;
-    string input;
-    int pincode = 1234;
-    bool onA = true;
-    bool onB = false;
-    bool off = false;
+     send("on");
+     Sleep(3000);
+     send("off");
+     Sleep(10000);
+     send("siren");
 
-    while (arduino.isConnected())
-    {
-        int i = 0;
-        while (onA)
-        {
-            while (i < 1)
-            {
-                cout << "enter pincode" << endl;
-                i++;
-            }
-            input = getInput();
-            checkSensor();
-            if (input.length() > 0)
-            {
-                cout << " input is: " << input << endl;
-                pin = stoi(input);
-                if (pin == pincode)
-                {
-                    cout << pin << endl;
-                    send("off");
-                    onA = false;
-                    off = true;
-                }
-                else
-                    cout << "wrong pincode, try again!" << endl;
-            }
-        }
-        i = 0;
-        while (onB)
-        {
-        }
-        i = 0;
-        while (off)
-        {
-            while (i < 1)
-            {
-                cout << "press A then pincode to activate a alarm " << endl;
-                cout << "press B then pincode to activate b alarm " << endl;
-                i++;
-            }
-            input = getInput();
-            if (input.length() > 0)
-            {
-                choice = input;
-                if (choice == "A")
-                {
-                    if (input.length() > 0)
-                    {
-                        pin = stoi(input);
-                        if (pin == pincode)
-                        {
-                            send("on");
-                            onA = true;
-                            off = false;
-                        }
-                        else
-                            cout << "wrong pincode, try again!" << endl;
-                    }
-                }
-            }
-            else if (choice == "B")
-            {
-                if (input.length() > 0)
-                {
-                    pin = stoi(input);
-                    if (pin == pincode)
-                    {
-                        send("on");
-                        onB = true;
-                        off = false;
-                    }
-                    else
-                        cout << "wrong pincode, try again!" << endl;
-                }
-                else
-                    cout << "not a valid choice! " << endl;
-            }
-        }
-    }
 
     return 0;
 }
