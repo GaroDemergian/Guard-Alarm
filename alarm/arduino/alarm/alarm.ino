@@ -12,9 +12,9 @@ bool guardingOff;
 Metro blinkRed = Metro(200);
 Metro blinkGreen = Metro(1000);
 Metro timeElapsed = Metro(3000);
-bool redOn = LOW;
-bool greenOn = LOW;
-bool yellowOn = LOW;
+bool redOn = false;
+bool greenOn = false;
+bool yellowOn = false;
 
 const byte ROWS = 4; // Four rows
 const byte COLS = 4; // Four columns
@@ -37,7 +37,6 @@ Keypad kpd = Keypad(makeKeymap(keys), rowPins, colPins, ROWS, COLS);
 #define buzzer 13
 #define green 4
 
-
 void setup()
 {
   pinMode(buzzer, OUTPUT);
@@ -51,70 +50,55 @@ void setup()
 
 void loop()
 {
-  
   while (guardingOnA)
   {
-    if (blinkRed.check())
+    intro();
+    digitalWrite(red, LOW);
+    digitalWrite(yellow, HIGH);
+    digitalWrite(green, HIGH);
+    while (guardingOnA)
     {
-      redOn = !redOn;
-      digitalWrite(red, redOn);
-      tone(buzzer, 700, 50);
-    }
-    
-    if (timeElapsed.check())
-    {
-      digitalWrite(yellow, HIGH);
-      digitalWrite(green, HIGH);
-      while (guardingOnA)
+      blueS = digitalRead(blueSensor);
+      redS = digitalRead(redSensor);
+      sensorStatus();
+      sendPinCode();
+      answer = read();
+      if (answer.equals("siren"))
+        siren();
+      if (answer.equals("off"))
       {
-        blueS = digitalRead(blueSensor);
-        redS = digitalRead(redSensor);
-        sensorStatus();
-        sendPinCode();
-        answer = read();
-        if (answer.equals("siren"))
-          siren();
-        if (answer.equals("off"))
-        {
-          guardingOff = true;
-          guardingOnB = false;
-          guardingOnA = false;
-          break;
-        }
+        guardingOff = true;
+        guardingOnB = false;
+        guardingOnA = false;
+        break;
       }
     }
+
   }
   while (guardingOnB)
   {
-    if (blinkRed.check())
+    intro();
+    digitalWrite(red, LOW);
+    digitalWrite(yellow, HIGH);
+    while (guardingOnB)
     {
-      redOn = !redOn;
-      digitalWrite(red, redOn);
-      tone(buzzer, 700, 50);
-    }
-    if (timeElapsed.check())
-    {
-      digitalWrite(yellow, HIGH);
-      while (guardingOnB)
+      blueS = digitalRead(blueSensor);
+      sensorStatus_B();
+      sendPinCode();
+      answer = read();
+      if (blinkGreen.check())
       {
-        blueS = digitalRead(blueSensor);
-        sensorStatus_B();
-        sendPinCode();
-        answer = read();
-        if (blinkGreen.check())
-        {
-          greenOn = !greenOn;
-          digitalWrite(green, greenOn);
-        }
-        if (answer.equals("siren"))
-          siren();
-        else if (answer.equals("off"))
-        {
-          guardingOnA = false;
-          guardingOnB = false;
-          guardingOff = true;
-          break;
-        }
+        greenOn = !greenOn;
+        digitalWrite(green, greenOn);
+      }
+      if (answer.equals("siren"))
+        siren();
+      else if (answer.equals("off"))
+      {
+        guardingOnA = false;
+        guardingOnB = false;
+        guardingOff = true;
+        break;
       }
     }
   }
@@ -152,6 +136,19 @@ void loop()
     }
   }
   i = 0;
+}
+void intro()
+{
+  Metro tim = Metro(20000);
+  while (tim.check())
+  {
+    if (blinkRed.check())
+    {
+      redOn = !redOn;
+      digitalWrite(red, redOn);
+      tone(buzzer, 700, 50);
+    }
+  }
 }
 
 void alarmOff()
@@ -205,10 +202,13 @@ void sendPinCode()
       input += key;
       keyBuzz(key);
     }
+    else
+      keyBuzz(key);
   }
   if (input.length() > 4 || key == '#')
   {
     Serial.print(input);
+    Serial.flush();
     input = "";
   }
 }
@@ -229,11 +229,13 @@ void sensorStatus()
   if (blueS == 1)
   {
     Serial.write("b");
+    Serial.flush();
     siren();
   }
   if (redS == 1)
   {
     Serial.write("r");
+    Serial.flush();
     siren();
   }
 }
@@ -242,6 +244,7 @@ void sensorStatus_B()
   if (blueS == 1)
   {
     Serial.write("b");
+    Serial.flush();
     siren();
   }
 }
