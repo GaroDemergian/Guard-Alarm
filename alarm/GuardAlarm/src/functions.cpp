@@ -129,6 +129,9 @@ void message_log(int num, string *str)
     case 11:
         *str = "Blocked user attempted alarm activation";
         break;
+    case 12:
+        *str = "Sensor low/Alarm/System locked";
+        break;
     }
 }
 

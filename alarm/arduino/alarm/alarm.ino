@@ -20,11 +20,10 @@ const byte ROWS = 4; // Four rows
 const byte COLS = 4; // Four columns
 // Define the Keymap
 char keys[ROWS][COLS] = {
-  {'1', '2', '3', 'A'},
-  {'4', '5', '6', 'B'},
-  {'7', '8', '9', 'C'},
-  {'*', '0', '#', 'D'}
-};
+    {'1', '2', '3', 'A'},
+    {'4', '5', '6', 'B'},
+    {'7', '8', '9', 'C'},
+    {'*', '0', '#', 'D'}};
 // Connect keypad ROW0, ROW1, ROW2 and ROW3 to these Arduino pins.
 byte rowPins[ROWS] = {12, 11, 10, 9};
 // Connect keypad COL0, COL1 and COL2 to these Arduino pins.
@@ -73,7 +72,6 @@ void loop()
         break;
       }
     }
-
   }
   while (guardingOnB)
   {
@@ -187,7 +185,10 @@ String usersChoice()
   key = kpd.getKey();
   if (key != NO_KEY)
     if (key == 'A' || key == 'B')
+    {
       z = key;
+      keyBuzz(key);
+    }
   return z;
 }
 
@@ -278,60 +279,60 @@ void keyBuzz(char key)
   {
     switch (key)
     {
-      case '1':
-        tone(buzzer, 261);
-        delay(100);
-        pinMode(buzzer, LOW);
-        break;
-      case '2':
-        tone(buzzer, 294);
-        delay(100);
-        pinMode(buzzer, LOW);
-        break;
-      case '3':
-        tone(buzzer, 329);
-        delay(100);
-        pinMode(buzzer, LOW);
-        break;
-      case '4':
-        tone(buzzer, 349);
-        delay(100);
-        pinMode(buzzer, LOW);
-        break;
-      case '5':
-        tone(buzzer, 392);
-        delay(100);
-        pinMode(buzzer, LOW);
-        break;
-      case '6':
-        tone(buzzer, 440);
-        delay(100);
-        pinMode(buzzer, LOW);
-        break;
-      case '7':
-        tone(buzzer, 493);
-        delay(100);
-        pinMode(buzzer, LOW);
-        break;
-      case '8':
-        tone(buzzer, 523);
-        delay(100);
-        pinMode(buzzer, LOW);
-        break;
-      case '9':
-        tone(buzzer, 588);
-        delay(100);
-        pinMode(buzzer, LOW);
-        break;
-      case '0':
-        tone(buzzer, 660);
-        delay(100);
-        pinMode(buzzer, LOW);
-        break;
-      default:
-        tone(buzzer, 660);
-        delay(100);
-        pinMode(buzzer, LOW);
+    case '1':
+      tone(buzzer, 261);
+      delay(100);
+      pinMode(buzzer, LOW);
+      break;
+    case '2':
+      tone(buzzer, 294);
+      delay(100);
+      pinMode(buzzer, LOW);
+      break;
+    case '3':
+      tone(buzzer, 329);
+      delay(100);
+      pinMode(buzzer, LOW);
+      break;
+    case '4':
+      tone(buzzer, 349);
+      delay(100);
+      pinMode(buzzer, LOW);
+      break;
+    case '5':
+      tone(buzzer, 392);
+      delay(100);
+      pinMode(buzzer, LOW);
+      break;
+    case '6':
+      tone(buzzer, 440);
+      delay(100);
+      pinMode(buzzer, LOW);
+      break;
+    case '7':
+      tone(buzzer, 493);
+      delay(100);
+      pinMode(buzzer, LOW);
+      break;
+    case '8':
+      tone(buzzer, 523);
+      delay(100);
+      pinMode(buzzer, LOW);
+      break;
+    case '9':
+      tone(buzzer, 588);
+      delay(100);
+      pinMode(buzzer, LOW);
+      break;
+    case '0':
+      tone(buzzer, 660);
+      delay(100);
+      pinMode(buzzer, LOW);
+      break;
+    default:
+      tone(buzzer, 660);
+      delay(100);
+      pinMode(buzzer, LOW);
     }
   }
 }

@@ -54,6 +54,7 @@ void send(class SerialPort *arduino, string msg)
 //function for locking the system if sensor signal was detected.
 void sensorlocked(class SerialPort *arduino)
 {
+    systemLog(12, "Unknown");
     cout << endl; cout << endl;
     cout << "*  *   *   *   ALARM   *   *   *   *" << endl;
     cout << "   *   *  Calling Security *   *   " << endl;
