@@ -177,8 +177,10 @@ void systemLog(int num, string id)
 //function for locking the system after 3 wrong pincode inputs.
 void locked(class SerialPort *arduino)
 {
-    cout << "****ALARM****" << endl;
-    cout << "Calling Security" << endl;
+    cout << endl; cout << endl;
+    cout << "*  *   *   *   ALARM   *   *   *   *" << endl;
+    cout << "   *   *  Calling Security *   *   " << endl;
+    cout << endl; cout << endl;
     systemLog(8, "Unknown");
     send(arduino, "siren");
     for (int i = 0; i < 1;)

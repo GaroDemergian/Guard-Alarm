@@ -13,6 +13,8 @@
 
 using namespace std;
 
+
+//recieves data from arduino and decides what to do with it.
 string getInput(class SerialPort *arduino)
 {
     //string for incoming data
@@ -20,17 +22,19 @@ string getInput(class SerialPort *arduino)
     
     string sensor;
     string empty = "";
+    //reads data and data size.
     int read_result = (*arduino).readSerialPort(incomingData, MAX_DATA_LENGTH);
-    if  (read_result == 1)
+    if  (read_result == 1)//if data size == 1 //one char
     {
-        checkSensor(arduino, incomingData);
+        checkSensor(arduino, incomingData); //send data to sensor function.
     }
-    else if (read_result == 4)
-        return incomingData;
+    else if (read_result == 4) //if data size is 4 chars
+        return incomingData; // returna data
     
-    return empty;
+    return empty; //else returns an empty string
 }
 
+//function used to send data (string) to arduino using SerialPort 
 void send(class SerialPort *arduino, string msg)
 {
     char output[MAX_DATA_LENGTH];
@@ -47,20 +51,24 @@ void send(class SerialPort *arduino, string msg)
     delete[] c_string;
 }
 
+//function for locking the system if sensor signal was detected.
 void sensorlocked(class SerialPort *arduino)
 {
-    cout << "****ALARM****" << endl;
-    cout << "Calling Security" << endl;
+    cout << endl; cout << endl;
+    cout << "*  *   *   *   ALARM   *   *   *   *" << endl;
+    cout << "   *   *  Calling Security *   *   " << endl;
+    cout << endl; cout << endl;
     for (int i = 0; i < 1;)
     {
-        string sensor = getSensorInfo(arduino);
+        string sensor = getSensorInfo(arduino); //get sensor data incoming from arduino
         if (sensor == "b")
-            systemLog("Blue", 0);
+            systemLog("Blue", 0); //logs the event if blur sensor was pushed
         else if (sensor == "r")
-            systemLog("Red", 0);
+            systemLog("Red", 0); //logs the event if red sensor was pushed
         Sleep(3000);
     } // The system stays in the loop.
 }
+
 
 void checkSensor(class SerialPort *arduino, string sensor)
 {
@@ -78,6 +86,7 @@ void checkSensor(class SerialPort *arduino, string sensor)
         systemLog("All Sensors", 1);
 }
 
+//funtion for writing text about sensor info in log file.
 void systemLog(string sensor, int status)
 {
     ofstream outFile;
@@ -108,11 +117,13 @@ void systemLog(string sensor, int status)
     }
 
     outFile.open("../GuardAlarm/bin/sensor.log", ofstream::app);
+    //line example: 1;20190104 20:04:13;Red;0
     outFile << rows + 1 << ";" << date << ";" << sensor << ";" << status << '\n';
 
     outFile.close();
 }
 
+//this function is used by checkSensor(). it reads data incoming from arduino
 string getSensorInfo(class SerialPort *arduino)
 {
     char incomingData[MAX_DATA_LENGTH];

@@ -35,7 +35,12 @@ int main()
     string input;
     unsigned int usersInput;
 
-    cout << "Loading System " << endl;
+    cout << endl;
+    cout << " * * * Loading System * * * " << endl;
+    cout << endl;
+    Sleep(500);
+    cout << "         *   *   *   " << endl;
+
     while (arduino.isConnected())
     {
         //this loop will keep the alarm system program running.
@@ -48,16 +53,17 @@ int main()
             while (guarding == true)
             {
                 cout << endl;
+                cout << "         *   *   *   " << endl;
                 cout << "Alarm activated " << endl;
                 cout << "Enter pincode " << endl;
 
-                //this function is mainly for stopping the user from entering a wrong pincode more than 3 times.
+                //this loop is mainly for stopping the user from entering a wrong pincode more than 3 times.
                 while (guarding == true && tries < 3)
                 {
-                    input = getInput(&arduino);
-                    if (input.length() == 4)
+                    input = getInput(&arduino); //imports a string incoming from arduino and saves it into input.
+                    if (input.length() == 4) // if input contains a string of 4 chars
                     {  
-                        usersInput = stoi(input);
+                        usersInput = stoi(input); //string to int and saves it into usersInput.
                         input = "0";
 
                         //If input == any of pincodes saved in file and user isnt blocked => menu.
@@ -67,7 +73,8 @@ int main()
                         if (guarding == true && tries < 3)
                         {
                             systemLog(4, "Unknown");
-                            cout << "Try again!" << endl;
+                            cout << endl;
+                            cout << "Wrong pincode! Try again!" << endl;
                             break;
                         }
                     }
@@ -78,9 +85,10 @@ int main()
                 if (guarding == true && tries == 3)
                     locked(&arduino);
             }
-
+            cout <<  endl;
+            cout << "         *   *   *" << endl;
             cout << "Alarm is deactivated" << endl;
-            userWelcomeMsg(activeUser);
+            userWelcomeMsg(activeUser); //gets users info from activeUser and prints out a message
 
             // A menu or choice for the user.
             int tries2 = 0;
@@ -90,14 +98,14 @@ int main()
             {
                 send(&arduino, "off");
                 cout << endl;
-                cout << "To activate outside and inside alarms press A then your pin code " << endl;
-                cout << "To activate only outside alarm press B then your pin code " << endl;
+                cout << "To activate outside and inside alarms press A then your pin code then #" << endl;
+                cout << "To activate only outside alarm press B then your pin code then #" << endl;
                 while (guarding == false && tries2 < 3)
                 {
-                    input2 = getInput(&arduino);
-                    if (input2.length() == 4)
+                    input2 = getInput(&arduino);//imports a string incoming from arduino and saves it into input2.
+                    if (input2.length() == 4) // if input contains a string of 4 chars
                     {
-                        usersInput = stoi(input2);
+                        usersInput = stoi(input2); //string to int and saves it into usersInput.
                         input2 = "0";
                         //If input == any of pincodes saved in file and user isnt blocked => menu.
                         //if not then try again, max 3 tries.
@@ -106,7 +114,8 @@ int main()
                         if (guarding == false && tries < 3)
                         {
                             systemLog(6, "Unknown");
-                            cout << "Try again!" << endl;
+                            cout << endl;
+                            cout << "Wrong pincode! Try again!" << endl;
                             break;
                         }
                     }
