@@ -25,15 +25,13 @@ void setup()
 
 void loop()
 {
-  for (int i = 0; i < 3000; i++)
-  {
-    if (blinkRed.check())
+  
+    if (blinkGreen.check())
     {
-      redOn = !redOn;
-      digitalWrite(red, redOn);
-      tone(buzz, 700, 50);
+      greenOn = !greenOn;
+      digitalWrite(green, greenOn);
     }
-  }
+
 }
 
 

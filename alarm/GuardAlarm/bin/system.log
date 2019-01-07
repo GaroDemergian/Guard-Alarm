@@ -4,3 +4,15 @@
 4;20190106 21:45:09;Unknown;;Failed to activate alarm
 5;20190106 21:45:12;Unknown;;Failed to activate alarm
 6;20190106 21:45:12;Unknown;;3 failed attempts/System locked!
+7;20190107 10:59:16;Sensor low/Alarm/System locked
+8;20190107 11:00:01;1;;Alarm deactivated
+9;20190107 11:00:13;4;;Alarm activated
+10;20190107 11:00:29;Sensor low/Alarm/System locked
+11;20190107 12:14:32;Sensor low/Alarm/System locked
+12;20190107 12:14:55;6;;Alarm deactivated
+13;20190107 12:15:16;6;;Alarm activated
+14;20190107 12:21:04;Sensor low/Alarm/System locked
+15;20190107 12:25:04;6;;Alarm deactivated/police notified
+16;20190107 12:25:23;1;;Alarm activated
+17;20190107 12:25:32;Sensor low/Alarm/System locked
+18;20190107 12:26:40;Unknown;;Failed to deactivate alarm
