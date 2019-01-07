@@ -1,8 +1,8 @@
 #include <Keypad.h>
 #include "Metro.h"
 
-int blueS = 0;
-int redS = 0;
+int blueS;
+int redS;
 String answer;
 String input;
 char key;
@@ -15,6 +15,8 @@ Metro timeElapsed = Metro(3000);
 bool redOn = false;
 bool greenOn = false;
 bool yellowOn = false;
+bool blueOk = true;
+bool redOk = true;
 
 const byte ROWS = 4; // Four rows
 const byte COLS = 4; // Four columns
@@ -50,15 +52,15 @@ void setup()
 
 void loop()
 {
+  blueOk = true;
+  redOk = true;
   while (guardingOnA)
   {
-    if (digitalRead(blueSensor) == HIGH || digitalRead(redSensor) == HIGH)
-      introRed();
-    else
+    checkActiveSensors();
+    if (digitalRead(blueSensor) == HIGH && digitalRead(redSensor) == HIGH)
       introGreenA();
     digitalWrite(red, LOW);
     digitalWrite(green, HIGH);
-
     while (guardingOnA)
     {
       blueS = digitalRead(blueSensor);
@@ -80,9 +82,8 @@ void loop()
   while (guardingOnB)
   {
 
-    if (digitalRead(blueSensor) == HIGH)
-      introRed();
-    else
+    checkActiveSensors();
+    if (digitalRead(blueSensor) == HIGH && digitalRead(redSensor) == HIGH)
       introGreenB();
 
     digitalWrite(red, LOW);
@@ -145,9 +146,22 @@ void loop()
   }
   i = 0;
 }
+
+void checkActiveSensors()
+{
+  if (digitalRead(blueSensor) == LOW || digitalRead(redSensor) == LOW)
+  {
+    if (digitalRead(blueSensor) == LOW)
+      blueOk = false;
+    if (digitalRead(redSensor) == LOW)
+      redOk = false;
+
+    introRed();
+  }
+}
 void introRed()
 {
-  Metro tim = Metro(20000);
+  Metro tim = Metro(22000);
   while (tim.check())
   {
     if (blinkRed.check())
@@ -162,7 +176,7 @@ void introRed()
 
 void introGreenA()
 {
-  if (digitalRead(blueSensor) == LOW || digitalRead(redSensor) == LOW)
+  if (digitalRead(blueSensor) == HIGH || digitalRead(redSensor) == HIGH)
   {
     for (int i = 0; i < 3; i++)
     {
@@ -173,7 +187,7 @@ void introGreenA()
 }
 void introGreenB()
 {
-  if (digitalRead(blueSensor) == LOW)
+  if (digitalRead(blueSensor) == HIGH)
   {
     for (int i = 0; i < 2; i++)
     {
@@ -239,11 +253,16 @@ void sendPinCode()
     else
       keyBuzz(key);
   }
-  if (input.length() > 4 || key == '#')
+  if (key == '#')
   {
-    Serial.print(input);
-    Serial.flush();
-    input = "";
+    if (input.length() == 4)
+    {
+      Serial.print(input);
+      Serial.flush();
+      input.remove(0);
+    }
+    else 
+      input.remove(0);
   }
 }
 
@@ -260,13 +279,13 @@ String read()
 }
 void sensorStatus()
 {
-  if (blueS == 1)
+  if (blueS == 0 && blueOk == true)
   {
     Serial.write("b");
     Serial.flush();
     siren();
   }
-  if (redS == 1)
+  if (redS == 0 && redOk == true)
   {
     Serial.write("r");
     Serial.flush();
@@ -275,7 +294,7 @@ void sensorStatus()
 }
 void sensorStatus_B()
 {
-  if (blueS == 1)
+  if (blueS == 0 && blueOk == true)
   {
     Serial.write("b");
     Serial.flush();

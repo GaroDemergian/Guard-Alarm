@@ -1,5 +1,5 @@
 #include "Metro.h"
-
+#define redButton A3
 #define red 2
 #define yellow 3
 #define green 4
@@ -20,18 +20,17 @@ void setup()
   pinMode(green, OUTPUT);
   pinMode(red, OUTPUT);
   pinMode(yellow, OUTPUT);
+  pinMode(redButton, INPUT);
   Serial.begin(9600);
 }
 
 void loop()
 {
+  if (digitalRead(redButton) == 0)
+    digitalWrite(red, HIGH);
+  else
+    digitalWrite(red, LOW);
   
-    if (blinkGreen.check())
-    {
-      greenOn = !greenOn;
-      digitalWrite(green, greenOn);
-    }
-
 }
 
 
