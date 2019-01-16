@@ -5,3 +5,57 @@
 5;20190109 14:34:52;Sensor low/Alarm/System locked
 6;20190109 14:35:29;Sensor low/Alarm/System locked
 7;20190109 14:36:29;Sensor low/Alarm/System locked
+8;20190115 22:08:46;Sensor low/Alarm/System locked
+9;20190115 22:11:19;1;;Alarm deactivated
+10;20190115 22:11:48;1;;Alarm activated
+11;20190115 22:12:03;Unknown;;Failed to deactivate alarm
+12;20190115 22:12:09;Unknown;;Failed to deactivate alarm
+13;20190115 22:12:15;Unknown;;3 failed attempts/System locked!
+14;20190115 22:12:48;Sensor low/Alarm/System locked
+15;20190115 22:13:04;Sensor low/Alarm/System locked
+16;20190115 22:15:23;Sensor low/Alarm/System locked
+17;20190115 22:16:07;Sensor low/Alarm/System locked
+18;20190115 22:17:08;1;;Alarm deactivated
+19;20190115 22:24:16;1;;Alarm deactivated
+20;20190115 22:25:07;1;;Alarm deactivated
+21;20190115 22:25:19;Unknown;;Failed to activate alarm
+22;20190115 22:25:29;1;;Alarm activated
+23;20190115 22:25:51;Unknown;;Failed to deactivate alarm
+24;20190115 22:25:55;Unknown;;Failed to deactivate alarm
+25;20190115 22:26:00;Unknown;;3 failed attempts/System locked!
+26;20190115 22:30:32;1;;Alarm deactivated
+27;20190115 22:32:28;1;;Alarm activated
+28;20190115 22:38:40;1;;Alarm deactivated
+29;20190115 22:38:48;1;;Alarm activated
+30;20190115 22:40:25;Unknown;;Failed to deactivate alarm
+31;20190115 22:40:29;Unknown;;Failed to deactivate alarm
+32;20190115 22:40:35;Unknown;;3 failed attempts/System locked!
+33;20190116 10:18:08;1;;Alarm deactivated
+34;20190116 10:19:12;Unknown;;Failed to activate alarm
+35;20190116 10:19:17;Unknown;;Failed to activate alarm
+36;20190116 10:19:21;Unknown;;Failed to activate alarm
+37;20190116 10:19:21;Unknown;;3 failed attempts/System locked!
+38;20190116 10:20:17;1;;Alarm deactivated
+39;20190116 10:20:51;1;;Alarm activated
+40;20190116 10:21:03;Unknown;;Failed to deactivate alarm
+41;20190116 10:21:08;Unknown;;Failed to deactivate alarm
+42;20190116 10:22:13;2;;Blocked user attempted alarm deactivation
+43;20190116 10:22:14;Unknown;;3 failed attempts/System locked!
+44;20190116 10:23:05;Unknown;;Failed to deactivate alarm
+45;20190116 10:23:26;3;;Alarm deactivated
+46;20190116 10:24:59;1;;Alarm deactivated
+47;20190116 10:25:08;3;;Alarm activated
+48;20190116 10:25:17;2;;Blocked user attempted alarm deactivation
+49;20190116 10:25:17;Unknown;;Failed to deactivate alarm
+50;20190116 10:25:20;Unknown;;Failed to deactivate alarm
+51;20190116 10:25:24;Unknown;;3 failed attempts/System locked!
+52;20190116 14:00:42;1;;Alarm deactivated
+53;20190116 14:01:42;1;;Alarm activated
+54;20190116 14:01:51;Sensor low/Alarm/System locked
+55;20190116 14:43:44;1;;Alarm deactivated
+56;20190116 14:44:03;1;;Alarm activated
+57;20190116 14:44:13;1;;Alarm deactivated
+58;20190116 14:44:22;Unknown;;Failed to activate alarm
+59;20190116 14:44:27;Unknown;;Failed to activate alarm
+60;20190116 14:44:32;Unknown;;Failed to activate alarm
+61;20190116 14:44:32;Unknown;;3 failed attempts/System locked!

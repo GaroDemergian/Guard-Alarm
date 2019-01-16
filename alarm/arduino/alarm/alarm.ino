@@ -1,5 +1,9 @@
 #include <Keypad.h>
 #include "Metro.h"
+#include <Wire.h>
+#include <LiquidCrystal_I2C.h>
+
+LiquidCrystal_I2C lcd(0x3F, 16, 2); // set the LCD address to 0x27 for a 16 chars and 2 line display
 
 int blueS;
 int redS;
@@ -32,8 +36,8 @@ byte rowPins[ROWS] = {12, 11, 10, 9};
 // Connect keypad COL0, COL1 and COL2 to these Arduino pins.
 byte colPins[COLS] = {8, 7, 6, 5};
 Keypad kpd = Keypad(makeKeymap(keys), rowPins, colPins, ROWS, COLS);
-#define blueSensor 19
-#define redSensor 17
+#define blueSensor 14
+#define redSensor 15
 #define red 2
 #define yellow 3
 #define buzzer 13
@@ -41,6 +45,12 @@ Keypad kpd = Keypad(makeKeymap(keys), rowPins, colPins, ROWS, COLS);
 
 void setup()
 {
+  lcd.init();
+  // Print a message to the LCD.
+  lcd.backlight();
+  lcd.setCursor(0, 0);
+  lcd.print("LOADING SYSTEM");
+
   pinMode(buzzer, OUTPUT);
   pinMode(blueSensor, INPUT);
   pinMode(redSensor, INPUT);
@@ -59,10 +69,20 @@ void loop()
     checkActiveSensors();
     if (digitalRead(blueSensor) == HIGH && digitalRead(redSensor) == HIGH)
       introGreenA();
+    else
+    {
+      lcd.clear();
+      lcd.setCursor(0, 0);
+      lcd.print("Sensor faulty...");
+    }
+    lcd.clear();
     digitalWrite(red, LOW);
     digitalWrite(green, HIGH);
     while (guardingOnA)
     {
+      
+      lcd.setCursor(0, 0);
+      lcd.print("Guarding A mode");
       blueS = digitalRead(blueSensor);
       redS = digitalRead(redSensor);
       sensorStatus();
@@ -85,9 +105,16 @@ void loop()
     checkActiveSensors();
     if (digitalRead(blueSensor) == HIGH && digitalRead(redSensor) == HIGH)
       introGreenB();
+    else
+    {
+      lcd.clear();
+      lcd.setCursor(0, 0);
+      lcd.print("Sensor faulty");
+    }
 
     digitalWrite(red, LOW);
     digitalWrite(yellow, LOW);
+    lcd.clear();
     while (guardingOnB)
     {
       if (blinkGreen.check())
@@ -95,7 +122,8 @@ void loop()
         greenOn = !greenOn;
         digitalWrite(green, greenOn);
       }
-
+      lcd.setCursor(0, 0);
+      lcd.print("Guarding B mode");
       blueS = digitalRead(blueSensor);
       sensorStatus_B();
       sendPinCode();
@@ -116,10 +144,13 @@ void loop()
   {
     while (i < 1)
     {
+      lcd.clear();
       alarmOff();
       i++;
     }
-
+    
+    lcd.setCursor(0, 0);
+    lcd.print("Guarding Off");
     String choice = usersChoice();
     while (choice == "A" || choice == "B")
     {
@@ -261,7 +292,7 @@ void sendPinCode()
       Serial.flush();
       input.remove(0);
     }
-    else 
+    else
       input.remove(0);
   }
 }
@@ -305,6 +336,9 @@ void siren()
 {
   bool on = true;
   int i;
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("* * *ALARM* * *");
   while (on)
   {
     for (i = 700; i < 800; i++)

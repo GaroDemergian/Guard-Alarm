@@ -23,7 +23,7 @@
 int main()
 {
 
-    char portNo[] = "\\\\.\\COM5";
+    char portNo[] = "\\\\.\\COM9";
     char *port_name = portNo;
     
     //Serial object
